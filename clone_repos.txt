@@ -1,0 +1,13 @@
+cd ..
+git clone https://github.com/horizontes-op/account.git
+git clone https://github.com/horizontes-op/account-resource.git
+git clone https://github.com/horizontes-op/aluno.git
+git clone https://github.com/horizontes-op/aluno-resource.git
+git clone https://github.com/horizontes-op/auth.git
+git clone https://github.com/horizontes-op/auth-resource.git
+git clone https://github.com/horizontes-op/discovery.git
+git clone https://github.com/horizontes-op/gateway.git
+cd docker-compose-deploy
+
+
+
