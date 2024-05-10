@@ -24,88 +24,35 @@ services:
     networks:
       - private-network
 
-  discovery:
-    build:
-      context: ../discovery/
-      dockerfile: Dockerfile
-    container_name: store-discovery
-    image: store-discovery:latest
-    ports:
-      - 8761:8761
-    restart: always
-    networks:
-      - private-network
-
-  gateway:
-    build:
-      context: ../gateway/
-      dockerfile: Dockerfile
-    container_name: store-gateway
-    image: store-gateway:latest
-    ports:
-      - 8080:8080
-    environment:
-      - eureka.client.service-url.defaultZone=http://store-discovery:8761/eureka/
-    networks:
-      - private-network
-    depends_on:
-      - discovery
-
-  account:
-    build:
-      context: ../account-resource/
-      dockerfile: Dockerfile
-    image: store-account:latest
-    environment:
-      - spring.datasource.url=jdbc:postgresql://store-db-store:5432/store
-      - spring.datasource.username=store
-      - spring.datasource.password=store
-      - eureka.client.service-url.defaultZone=http://store-discovery:8761/eureka/
-    deploy:
-      mode: replicated
-      replicas: 1
-    restart: always
-    networks:
-      - private-network
-    depends_on:
-      - db-store
-      - discovery
-
   aluno:
     build:
       context: ../aluno-resource/
       dockerfile: Dockerfile
     image: store-aluno:latest
+    ports:
+      - 8081:8080
     environment:
       - spring.datasource.url=jdbc:postgresql://store-db-store:5432/store
       - spring.datasource.username=store
       - spring.datasource.password=store
       - eureka.client.service-url.defaultZone=http://store-discovery:8761/eureka/
-    deploy:
-      mode: replicated
-      replicas: 1
     networks:
       - private-network
-    depends_on:
-      - db-store
-      - discovery
-      - account
 
-  auth:
+  instituicao:
     build:
-      context: ../auth-resource/
+      context: ../instituicao-resource/
       dockerfile: Dockerfile
-    image: store-auth:latest
+    image: store-instituicao:latest
+    ports:
+      - 8082:8080
     environment:
+      - spring.datasource.url=jdbc:postgresql://store-db-store:5432/store
+      - spring.datasource.username=store
+      - spring.datasource.password=store
       - eureka.client.service-url.defaultZone=http://store-discovery:8761/eureka/
-    deploy:
-      mode: replicated
-      replicas: 1
     networks:
       - private-network
-    depends_on:
-      - discovery
-      - account
 
 networks:
   private-network:
